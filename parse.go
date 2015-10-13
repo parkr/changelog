@@ -16,6 +16,8 @@ var (
 	verbose = false
 )
 
+// SetVerbose sets the verbose flag to the value passed.
+// If true is passed, verbose logging will be enabled.
 func SetVerbose(v bool) {
 	verbose = v
 }
