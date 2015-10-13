@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -13,6 +14,8 @@ func main() {
 	// Read options
 	var filename string
 	flag.StringVar(&filename, "file", "", "The path to your changelog")
+	var output string
+	flag.StringVar(&output, "out", "", "Where to write the changelog")
 	flag.Parse()
 
 	// Find History.markdown
@@ -26,8 +29,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Fprintf(os.Stderr, "%s", history)
-
-	// Add Changelog entry to correct part
 	// Write History.markdown
+	var writer io.Writer
+	if output == "" {
+		writer = os.Stderr
+	} else {
+		f, err := os.Create(output)
+		if err != nil {
+			log.Fatal(err)
+		}
+		writer = f
+		defer f.Close()
+	}
+	fmt.Fprintf(writer, "%s", history)
 }
