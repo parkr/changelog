@@ -16,7 +16,11 @@ func main() {
 	flag.StringVar(&filename, "file", "", "The path to your changelog")
 	var output string
 	flag.StringVar(&output, "out", "", "Where to write the changelog")
+	var verbose bool
+	flag.BoolVar(&verbose, "v", false, "Whether to print verbose output")
 	flag.Parse()
+
+	changelog.SetVerbose(verbose)
 
 	// Find History.markdown
 	if filename == "" {
