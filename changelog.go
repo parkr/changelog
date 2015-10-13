@@ -130,6 +130,7 @@ func NewChangelog(filename string) (*Changelog, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 	return NewChangelogFromReader(file)
 }
 
