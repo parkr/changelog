@@ -1,10 +1,15 @@
 all: build test run
 
-build:
+dist:
+	mkdir -p dist
+
+build: dist
 	go build
+	go build -o dist/changelogger ./changelogger
 
 test:
 	go test ./...
 
-run:
-	go run changelogger/changelogger.go
+run: build
+	dist/changelogger -h || true
+	dist/changelogger -out=History.markdown
