@@ -5,12 +5,14 @@ Motivation: automate update of changelogs
 
 Bundled with a command, `changelogger`.
 
+[![Build Status](https://travis-ci.org/parkr/changelog.svg?branch=master)](https://travis-ci.org/parkr/changelog)
+
 ## `changelogger` command
 
 ### Installation
 
     $ go get github.com/parkr/changelog/changelogger
-    
+
 ### Usage
 
     $ $GOPATH/bin/changelogger
@@ -21,18 +23,18 @@ Bundled with a command, `changelogger`.
 ### Installation
 
     $ go get github.com/parkr/changelog
-    
+
 ### Usage
 
     // Parse changelog at a given filename
     changes, err := changelog.NewChangelog("CHANGELOG.md")
-    
+
     // Discover the filename of your changelog
     filename := changelog.HistoryFilename()
-    
+
     // Parse changelog from some io.Reader
     changes, err := changelog.NewChangeLogFromReader(req.Body)
-    
+
 ## License
 
-MIT License, Copyright 2015 Parker Moore. See [LICENSE](LICENSE) for details. 
+MIT License, Copyright 2015 Parker Moore. See [LICENSE](LICENSE) for details.
