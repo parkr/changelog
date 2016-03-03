@@ -20,51 +20,6 @@ func (c *Changelog) String() string {
 	return join(c.Versions, "\n\n") + "\n"
 }
 
-func (c *Changelog) getVersion(versionNum string) *Version {
-	for _, v := range c.Versions {
-		if v.Version == versionNum {
-			return v
-		}
-	}
-	return nil
-}
-
-func (c *Changelog) getSubsection(versionNum, subsectionName string) *Subsection {
-	for _, s := range c.getVersion(versionNum).Subsections {
-		if s.Name == subsectionName {
-			return s
-		}
-	}
-	return nil
-}
-
-// AddSubsection adds a Subsection with the given name to the given version.
-func (c *Changelog) AddSubsection(versionNum string, subsection string) {
-	version := c.getVersion(versionNum)
-	version.Subsections = append(version.Subsections, &Subsection{Name: subsection})
-}
-
-// AddLineToVersion adds a ChangeLine to the given version's direct
-// history. This is only to be used when it is inappropriate to add it to a
-// subsection, or the version's changes don't warrant subsections.
-func (c *Changelog) AddLineToVersion(versionNum string, line *ChangeLine) {
-	c.addToChangelines(&c.getVersion(versionNum).History, line)
-}
-
-// AddLineToSubsection adds a ChangeLine to the given version's
-// subsection's history.
-//
-// For example, this could be used to add a change to v1.4.2's "Major
-// Enhancements" subsection.
-func (c *Changelog) AddLineToSubsection(versionNum, subsectionName string, line *ChangeLine) {
-	s := c.getSubsection(versionNum, subsectionName)
-	c.addToChangelines(&s.History, line)
-}
-
-func (c *Changelog) addToChangelines(lines *[]*ChangeLine, line *ChangeLine) {
-	*lines = append(*lines, line)
-}
-
 // Version contains the data for the changes for a given version. It can
 // have both direct history and subsections.
 // Acceptable formats:
@@ -169,8 +124,13 @@ func join(lines interface{}, sep string) string {
 	return strings.Join(ret, sep)
 }
 
+// NewChangelog creates a pristine Changelog.
+func NewChangelog() *Changelog {
+	return &Changelog{Versions: []*Version{}}
+}
+
 // NewChangelog builds a changelog from the file at the provided filename.
-func NewChangelog(filename string) (*Changelog, error) {
+func NewChangelogFromFile(filename string) (*Changelog, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -182,7 +142,7 @@ func NewChangelog(filename string) (*Changelog, error) {
 // NewChangelogFromReader builds a changelog from the contents read in
 // through the reader it's passed.
 func NewChangelogFromReader(reader io.Reader) (*Changelog, error) {
-	history := &Changelog{Versions: []*Version{}}
+	history := NewChangelog()
 	err := parseChangelog(reader, history)
 	if err != nil {
 		return nil, err
