@@ -28,7 +28,7 @@ func main() {
 	}
 
 	// Read History.markdown
-	history, err := changelog.NewChangelog(filename)
+	history, err := changelog.NewChangelogFromFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}

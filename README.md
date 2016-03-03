@@ -27,7 +27,7 @@ Bundled with a command, `changelogger`.
 ### Usage
 
     // Parse changelog at a given filename
-    changes, err := changelog.NewChangelog("CHANGELOG.md")
+    changes, err := changelog.NewChangelogFromFile("CHANGELOG.md")
 
     // Discover the filename of your changelog
     filename := changelog.HistoryFilename()
