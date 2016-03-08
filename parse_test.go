@@ -55,6 +55,10 @@ var (
 			text:    "  * The `coolest` change eVAR :smile: (abcdef23)",
 			matched: []string{"* The `coolest` change eVAR :smile: (abcdef23)", "The `coolest` change eVAR :smile:", " (abcdef23)", "abcdef23", "", "abcdef23"},
 		},
+		{
+			text:    "    * Fixed that narsty bug with tokenization (@carla)",
+			matched: []string{"* Fixed that narsty bug with tokenization (@carla)", "Fixed that narsty bug with tokenization", " (@carla)", "@carla", "", "@carla"},
+		},
 	}
 	representativeChangelog = `## HEAD
 
