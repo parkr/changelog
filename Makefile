@@ -1,4 +1,4 @@
-REV=$(shell git rev-parse HEAD)
+REV:=$(shell git rev-parse HEAD)
 
 all: build test run
 
