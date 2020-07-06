@@ -64,7 +64,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			logVerbose("headerMatches:", matches, len(matches))
 			currentHeader = matches[1]
 			currentSubHeader = ""
-			logVerbose("currentHeader: '%s'", currentHeader)
+			logVerbose("currentHeader:", currentHeader)
 			history.Versions = append(history.Versions, versionFromMatches(matches))
 			continue
 		}
@@ -73,7 +73,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 		if matches, ok := matchLine(subheaderRegexp, txt); ok {
 			logVerbose("subHeaderMatches:", matches, len(matches))
 			currentSubHeader = matches[1]
-			logVerbose("currentSubHeader: '%s'", currentSubHeader)
+			logVerbose("currentSubHeader:", currentSubHeader)
 			history.GetSubsectionOrCreate(currentHeader, currentSubHeader)
 			continue
 		}

@@ -1,3 +1,5 @@
+REV:=$(shell git rev-parse HEAD)
+
 all: build test run
 
 testdeps:
@@ -16,3 +18,6 @@ test: testdeps
 run: build
 	dist/changelogger -h || true
 	dist/changelogger -out=History.markdown
+
+docker-build:
+	docker build -t parkr/changelog:$(REV) .
