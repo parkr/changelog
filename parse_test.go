@@ -12,6 +12,26 @@ type testRegexpOutput struct {
 var (
 	versions = []testRegexpOutput{
 		{
+			text:    "# HEAD",
+			matched: []string{"# HEAD", "HEAD", "", "", ""},
+		},
+		{
+			text:    "# 1.0.0",
+			matched: []string{"# 1.0.0", "1.0.0", ".0", "", ""},
+		},
+		{
+			text:    "# 80.92.12 / 2015-02-30",
+			matched: []string{"# 80.92.12 / 2015-02-30", "80.92.12", ".12", " / 2015-02-30", "2015-02-30"},
+		},
+		{
+			text:    "# v0.6",
+			matched: []string{"# v0.6", "v0.6", "", "", ""},
+		},
+		{
+			text:    " # v0.6 / 2015-02-30",
+			matched: []string{"# v0.6 / 2015-02-30", "v0.6", "", " / 2015-02-30", "2015-02-30"},
+		},
+		{
 			text:    "## HEAD",
 			matched: []string{"## HEAD", "HEAD", "", "", ""},
 		},
