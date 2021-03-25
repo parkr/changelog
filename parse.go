@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	versionRegexp           = regexp.MustCompile(`## (?i:(HEAD|v?\d+.\d+(.\d+)?)( / (\d{4}-\d{2}-\d{2}))?)`)
+	versionRegexp           = regexp.MustCompile(`##? (?i:(HEAD|v?\d+.\d+(.\d+)?)( / (\d{4}-\d{2}-\d{2}))?)`)
 	subheaderRegexp         = regexp.MustCompile(`### ([0-9A-Za-z_ ]+)`)
 	changeLineRegexp        = regexp.MustCompile(`\* (.+)`)
 	changeLineRegexpWithRef = regexp.MustCompile(`\* (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
