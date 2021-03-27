@@ -1,8 +1,11 @@
 package changelog
 
-import "testing"
-import "strings"
-import "github.com/stretchr/testify/assert"
+import (
+	"strings"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 type testRegexpOutput struct {
 	text    string
@@ -64,6 +67,10 @@ var (
 	}
 	changelines = []testRegexpOutput{
 		{
+			text:    "* I made a really cool change!",
+			matched: []string{"* I made a really cool change!", "I made a really cool change!"},
+		},
+		{
 			text:    "  * I made a really cool change!",
 			matched: []string{"* I made a really cool change!", "I made a really cool change!"},
 		},
@@ -78,6 +85,26 @@ var (
 		{
 			text:    "    * Fixed that narsty bug with tokenization (@carla)",
 			matched: []string{"* Fixed that narsty bug with tokenization (@carla)", "Fixed that narsty bug with tokenization", " (@carla)", "@carla", "", "@carla"},
+		},
+		{
+			text:    "- I made a really cool change!",
+			matched: []string{"- I made a really cool change!", "I made a really cool change!"},
+		},
+		{
+			text:    "  - I made a really cool change!",
+			matched: []string{"- I made a really cool change!", "I made a really cool change!"},
+		},
+		{
+			text:    "  - The `coolest` change eVAR :smile: (#123)",
+			matched: []string{"- The `coolest` change eVAR :smile: (#123)", "The `coolest` change eVAR :smile:", " (#123)", "#123", "#123", ""},
+		},
+		{
+			text:    "  - The `coolest` change eVAR :smile: (abcdef23)",
+			matched: []string{"- The `coolest` change eVAR :smile: (abcdef23)", "The `coolest` change eVAR :smile:", " (abcdef23)", "abcdef23", "", "abcdef23"},
+		},
+		{
+			text:    "    - Fixed that narsty bug with tokenization (@carla)",
+			matched: []string{"- Fixed that narsty bug with tokenization (@carla)", "Fixed that narsty bug with tokenization", " (@carla)", "@carla", "", "@carla"},
 		},
 	}
 	representativeChangelog = `## HEAD
