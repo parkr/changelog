@@ -1,4 +1,4 @@
-## HEAD
+## 1.1.0 / 2022-10-18
 
 - Maintain sort order, and support no-header sections (#21)
 - Unopinionate date separator in the version header (#14)
