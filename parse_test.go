@@ -1,6 +1,7 @@
 package changelog
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -194,4 +195,21 @@ func TestParseChangelog(t *testing.T) {
 	assert.Equal(t, "2012-01-01", changes.Versions[2].Date)
 	assert.Len(t, changes.Versions[2].History, 1)
 	assert.Equal(t, "Birthday!!!!!", changes.Versions[2].History[0].Summary)
+}
+
+func TestParseChangelog_WithoutHeaders(t *testing.T) {
+	fd, err := os.Open("testdata/changelog-checkboxes-no-headers.md")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := NewChangelog()
+	expected.AddLineToVersion("", &ChangeLine{Summary: "[ ] [Issue 1 complete](https://github.com/foo/bar/issue/1)"})
+	expected.AddLineToVersion("", &ChangeLine{Summary: "[ ] [Issue 2 complete, too!](https://github.com/foo/bar/issue/2)"})
+	expected.AddLineToVersion("", &ChangeLine{Summary: "[ ] [Secretly Issue 3, but masquerading as issue 4](https://github.com/foo/bar/issue/3)\n\n[You can see more later sometime maybe!](https://hi.there/foo)"})
+	changes := NewChangelog()
+
+	err = parseChangelog(fd, changes)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expected, changes)
 }
