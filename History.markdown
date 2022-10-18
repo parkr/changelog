@@ -1,6 +1,7 @@
 ## HEAD
 
 - Maintain sort order, and support no-header sections (#21)
+- Unopinionate date separator in the version header (#14)
 
 ## 1.0.0 / 2022-02-07
 
