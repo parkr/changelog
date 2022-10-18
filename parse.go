@@ -11,8 +11,8 @@ import (
 var (
 	versionRegexp           = regexp.MustCompile(`##? (?i:(HEAD|v?\d+\.\d+(?:\.\d+)?))(?U:.*)(\d{4}-\d{2}-\d{2})?.?$`)
 	subheaderRegexp         = regexp.MustCompile(`### ([0-9A-Za-z_ ]+)`)
-	changeLineRegexp        = regexp.MustCompile(`\* (.+)`)
-	changeLineRegexpWithRef = regexp.MustCompile(`\* (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
+	changeLineRegexp        = regexp.MustCompile(`[\*|\-] (.+)`)
+	changeLineRegexpWithRef = regexp.MustCompile(`[\*|\-] (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
 
 	verbose = false
 )
@@ -36,17 +36,12 @@ func matchLine(regexp *regexp.Regexp, line string) (matches []string, doesMatch 
 	return nil, false
 }
 
-func versionFromMatches(matches []string) *Version {
+func versionDateFromMatches(matches []string) string {
 	var date string
 	if len(matches) == 3 {
 		date = matches[2]
 	}
-	return &Version{
-		Version:     matches[1],
-		Date:        date,
-		History:     []*ChangeLine{},
-		Subsections: []*Subsection{},
-	}
+	return date
 }
 
 func parseChangelog(file io.Reader, history *Changelog) error {
@@ -65,7 +60,8 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			currentHeader = matches[1]
 			currentSubHeader = ""
 			logVerbose("currentHeader:", currentHeader)
-			history.Versions = append(history.Versions, versionFromMatches(matches))
+			newVersion := history.GetVersionOrCreate(currentHeader)
+			newVersion.Date = versionDateFromMatches(matches)
 			continue
 		}
 
@@ -104,7 +100,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			continue
 		} else {
 			if strings.TrimSpace(txt) != "" && currentLine != nil {
-				currentLine.Summary += " " + strings.TrimSpace(txt)
+				currentLine.Summary += "\n\n" + txt
 			}
 		}
 	}
