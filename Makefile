@@ -17,7 +17,8 @@ test: testdeps
 
 run: build
 	dist/changelogger -h || true
-	dist/changelogger -out=History.markdown
+	dist/changelogger -file=testdata/History.markdown -out=dist/History-changelogger.markdown
+	diff testdata/History.markdown dist/History-changelogger.markdown
 
 docker-build:
 	docker build -t parkr/changelog:$(REV) .

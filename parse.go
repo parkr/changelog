@@ -36,17 +36,12 @@ func matchLine(regexp *regexp.Regexp, line string) (matches []string, doesMatch 
 	return nil, false
 }
 
-func versionFromMatches(matches []string) *Version {
+func versionDateFromMatches(matches []string) string {
 	var date string
 	if len(matches) == 5 {
 		date = matches[4]
 	}
-	return &Version{
-		Version:     matches[1],
-		Date:        date,
-		History:     []*ChangeLine{},
-		Subsections: []*Subsection{},
-	}
+	return date
 }
 
 func parseChangelog(file io.Reader, history *Changelog) error {
@@ -65,7 +60,8 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			currentHeader = matches[1]
 			currentSubHeader = ""
 			logVerbose("currentHeader:", currentHeader)
-			history.Versions = append(history.Versions, versionFromMatches(matches))
+			newVersion := history.GetVersionOrCreate(currentHeader)
+			newVersion.Date = versionDateFromMatches(matches)
 			continue
 		}
 
@@ -104,7 +100,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			continue
 		} else {
 			if strings.TrimSpace(txt) != "" && currentLine != nil {
-				currentLine.Summary += " " + strings.TrimSpace(txt)
+				currentLine.Summary += "\n\n" + txt
 			}
 		}
 	}

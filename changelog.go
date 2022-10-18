@@ -17,6 +17,7 @@ type Changelog struct {
 
 // A Markdown string representation of the Changelog.
 func (c *Changelog) String() string {
+	c.sortVersions()
 	return join(c.Versions, "\n\n") + "\n"
 }
 
@@ -24,8 +25,8 @@ func (c *Changelog) String() string {
 // have both direct history and subsections.
 // Acceptable formats:
 //
-//     ## 2.4.1
-//     ## 2.4.1 / 2015-04-23
+//	## 2.4.1
+//	## 2.4.1 / 2015-04-23
 //
 // The version currently cannot be prefixed with a `v`, but a date is
 // optional.
@@ -34,27 +35,38 @@ type Version struct {
 	Date        string
 	History     []*ChangeLine
 	Subsections []*Subsection
+
+	sortOrder int
 }
 
 // String returns the markdown representation for the version.
 func (v *Version) String() string {
-	out := fmt.Sprintf("## %s", v.Version)
+	lines := []string{}
+	if v.Version != "" {
+		if len(lines) == 0 {
+			lines = append(lines, "")
+		}
+		lines[0] += "## " + v.Version
+	}
 	if v.Date != "" {
-		out += " / " + v.Date
+		if len(lines) == 0 {
+			lines = append(lines, "")
+		}
+		lines[0] += " / " + v.Date
 	}
 	if len(v.History) > 0 {
-		out += "\n\n" + join(v.History, "\n")
+		lines = append(lines, join(v.History, "\n"))
 	}
 	if len(v.Subsections) > 0 {
-		out += "\n\n" + join(v.Subsections, "\n\n")
+		lines = append(lines, join(v.Subsections, "\n\n"))
 	}
-	return out
+	return strings.Join(lines, "\n\n")
 }
 
 // Subsection contains the data for a given subsection.
 // Acceptable format:
 //
-//     ### Subsection Name Here
+//	### Subsection Name Here
 //
 // Common subsections are "Major Enhancements," and "Bug Fixes."
 type Subsection struct {
@@ -77,9 +89,9 @@ func (s *Subsection) String() string {
 // ChangeLine contains the data for a single change.
 // Acceptable formats:
 //
-//     * This is a change (#1234)
-//     * This is another change. (@parkr)
-//     * This is a change w/o a reference.
+//   - This is a change (#1234)
+//   - This is another change. (@parkr)
+//   - This is a change w/o a reference.
 //
 // The references must be encased in parentheses, and only one reference is
 // currently supported.

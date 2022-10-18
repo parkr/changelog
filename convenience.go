@@ -1,12 +1,27 @@
 package changelog
 
+import (
+	"sort"
+	"strings"
+)
+
 // NewVersion allocates a new Version struct with all the fields
 // initialized except {{.Date}}.
 func NewVersion(versionNum string) *Version {
+	var sortOrder int
+	switch strings.TrimSpace(versionNum) {
+	case "":
+		sortOrder = -1
+	case "HEAD":
+		sortOrder = 0
+	default:
+		sortOrder = 1
+	}
 	return &Version{
 		Version:     versionNum,
 		History:     []*ChangeLine{},
 		Subsections: []*Subsection{},
+		sortOrder:   sortOrder,
 	}
 }
 
@@ -28,7 +43,13 @@ func (c *Changelog) GetVersionOrCreate(versionNum string) *Version {
 	version := c.GetVersion(versionNum)
 	if version == nil {
 		version = NewVersion(versionNum)
-		c.Versions = append([]*Version{version}, c.Versions...)
+		if len(c.Versions) > 0 && version.sortOrder > 0 && c.Versions[len(c.Versions)-1].sortOrder > 0 {
+			logVerbose("previous sortOrder:", c.Versions[len(c.Versions)-1].sortOrder, "version:", c.Versions[len(c.Versions)-1].Version)
+			version.sortOrder = c.Versions[len(c.Versions)-1].sortOrder + 1
+		}
+		logVerbose("sortOrder:", version.sortOrder, "version:", version.Version)
+		c.Versions = append(c.Versions, version)
+		c.sortVersions()
 	}
 	return version
 }
@@ -100,4 +121,10 @@ func (c *Changelog) addToChangelines(lines *[]*ChangeLine, line *ChangeLine) {
 	}
 
 	*lines = append(*lines, line)
+}
+
+func (c *Changelog) sortVersions() {
+	sort.SliceStable(c.Versions, func(i, j int) bool {
+		return c.Versions[i].sortOrder < c.Versions[j].sortOrder
+	})
 }
