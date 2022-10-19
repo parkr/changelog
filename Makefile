@@ -1,6 +1,6 @@
 REV:=$(shell git rev-parse HEAD)
 
-all: build test run
+all: build test bench run
 
 testdeps:
 	go get github.com/stretchr/testify/assert
@@ -14,6 +14,9 @@ build: dist
 
 test: testdeps
 	go test -v ./...
+
+bench: testdeps
+	go test -bench=. -v ./...
 
 run: build
 	dist/changelogger -h || true

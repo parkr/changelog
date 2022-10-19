@@ -1,7 +1,6 @@
 package changelog
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -77,11 +76,7 @@ type Subsection struct {
 // String returns the markdown representation of the subsection.
 func (s *Subsection) String() string {
 	if len(s.History) > 0 {
-		return fmt.Sprintf(
-			"### %s\n\n%s",
-			s.Name,
-			join(s.History, "\n"),
-		)
+		return "### " + s.Name + "\n\n" + join(s.History, "\n")
 	}
 	return ""
 }
@@ -106,17 +101,11 @@ type ChangeLine struct {
 // String returns the markdown representation of the ChangeLine.
 // E.g. "  * Added documentation. (#123)"
 func (l *ChangeLine) String() string {
-	if l.Reference == "" {
-		return fmt.Sprintf(
-			"  * %s",
-			l.Summary,
-		)
+	str := "  * " + l.Summary
+	if l.Reference != "" {
+		str += " (" + l.Reference + ")"
 	}
-	return fmt.Sprintf(
-		"  * %s (%s)",
-		l.Summary,
-		l.Reference,
-	)
+	return str
 }
 
 // join calls the .String() function of each element in the slice it's

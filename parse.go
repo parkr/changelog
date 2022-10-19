@@ -29,6 +29,10 @@ func logVerbose(args ...interface{}) {
 	}
 }
 
+func logFatal(format string, args ...interface{}) {
+	log.Fatalf(format, args...)
+}
+
 func matchLine(regexp *regexp.Regexp, line string) (matches []string, doesMatch bool) {
 	if regexp.MatchString(line) {
 		return regexp.FindStringSubmatch(line), true
