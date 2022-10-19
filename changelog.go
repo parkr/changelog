@@ -3,7 +3,6 @@ package changelog
 import (
 	"io"
 	"os"
-	"reflect"
 	"strings"
 )
 
@@ -17,7 +16,11 @@ type Changelog struct {
 // A Markdown string representation of the Changelog.
 func (c *Changelog) String() string {
 	c.sortVersions()
-	return join(c.Versions, "\n\n") + "\n"
+	versionStrs := make([]string, len(c.Versions))
+	for i, version := range c.Versions {
+		versionStrs[i] = version.String()
+	}
+	return strings.Join(versionStrs, "\n\n") + "\n"
 }
 
 // Version contains the data for the changes for a given version. It can
@@ -54,10 +57,18 @@ func (v *Version) String() string {
 		lines[0] += " / " + v.Date
 	}
 	if len(v.History) > 0 {
-		lines = append(lines, join(v.History, "\n"))
+		historyStrs := make([]string, len(v.History))
+		for i, history := range v.History {
+			historyStrs[i] = history.String()
+		}
+		lines = append(lines, strings.Join(historyStrs, "\n"))
 	}
 	if len(v.Subsections) > 0 {
-		lines = append(lines, join(v.Subsections, "\n\n"))
+		subsectionsStrs := make([]string, len(v.Subsections))
+		for i, subsection := range v.Subsections {
+			subsectionsStrs[i] = subsection.String()
+		}
+		lines = append(lines, strings.Join(subsectionsStrs, "\n\n"))
 	}
 	return strings.Join(lines, "\n\n")
 }
@@ -76,7 +87,11 @@ type Subsection struct {
 // String returns the markdown representation of the subsection.
 func (s *Subsection) String() string {
 	if len(s.History) > 0 {
-		return "### " + s.Name + "\n\n" + join(s.History, "\n")
+		historyStrs := make([]string, len(s.History))
+		for i, history := range s.History {
+			historyStrs[i] = history.String()
+		}
+		return "### " + s.Name + "\n\n" + strings.Join(historyStrs, "\n")
 	}
 	return ""
 }
@@ -106,23 +121,6 @@ func (l *ChangeLine) String() string {
 		str += " (" + l.Reference + ")"
 	}
 	return str
-}
-
-// join calls the .String() function of each element in the slice it's
-// passed, then joins those strings by the given separator.
-func join(lines interface{}, sep string) string {
-	s := reflect.ValueOf(lines)
-	if s.Kind() != reflect.Slice {
-		panic("join given a non-slice type")
-	}
-
-	ret := make([]string, s.Len())
-	for i := 0; i < s.Len(); i++ {
-		vals := s.Index(i).MethodByName("String").Call(nil)
-		ret[i] = vals[0].String()
-	}
-
-	return strings.Join(ret, sep)
 }
 
 // NewChangelog creates a pristine Changelog.
