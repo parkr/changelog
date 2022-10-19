@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -45,5 +44,7 @@ func main() {
 		writer = f
 		defer f.Close()
 	}
-	fmt.Fprintf(writer, "%s", history)
+	if _, err := writer.Write([]byte(history.String())); err != nil {
+		log.Fatal(err)
+	}
 }

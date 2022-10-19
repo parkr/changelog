@@ -674,7 +674,7 @@
   * Allow custom markdown processors (#1872)
   * Provide support for the Rouge syntax highlighter (#1859)
   * Provide support for Sass (#1932)
-  * Provide a 300%!i(MISSING)mprovement when generating sites that use `Post#next` or `Post#previous` (#1983)
+  * Provide a 300% improvement when generating sites that use `Post#next` or `Post#previous` (#1983)
   * Provide support for CoffeeScript (#1991)
   * Replace Maruku with Kramdown as Default Markdown Processor (#1988)
   * Expose `site.static_files` to Liquid (#2075)
@@ -755,7 +755,7 @@
   * Only strip the drive name if it begins the string (#2175)
   * Remove default post with invalid date from site template (#2200)
   * Fix `Post#url` and `Page#url` escape (#1568)
-  * Strip newlines from the `{%!h(MISSING)ighlight %!}(MISSING)` block content (#1823)
+  * Strip newlines from the `{% highlight %}` block content (#1823)
   * Load in `rouge` only when it's been requested as the highlighter (#2189)
   * Convert input to string before XML escaping (`xml_escape` liquid filter) (#2244)
   * Modify configuration key for Collections and reset properly. (#2238)
@@ -1614,7 +1614,7 @@
 ## 0.5.5 / 2010-01-08
 
   * Bug Fixes
-  * Fix pagination %!b(MISSING)ug (#78)
+  * Fix pagination % 0 bug (#78)
   * Ensure all posts are processed first (#71)
   * After this point I will no longer be giving credit in the history; that is what the commit log is for.
 
@@ -1746,7 +1746,7 @@
 ## 0.1.6 / 2008-12-13
 
   * Major Features
-  * Include files in `_includes` with `{%!i(MISSING)nclude x.textile %!}(MISSING)`
+  * Include files in `_includes` with `{% include x.textile %}`
 
 ## 0.1.5 / 2008-12-12
 

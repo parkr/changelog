@@ -1,9 +1,7 @@
 package changelog
 
 import (
-	"fmt"
 	"io/ioutil"
-	"os"
 	"regexp"
 )
 
@@ -17,8 +15,8 @@ var historyFilenameRegexp = regexp.MustCompile("(?i:(History|Changelog).m(ar)?k?
 func HistoryFilename() string {
 	infos, err := ioutil.ReadDir(".")
 	if err != nil {
-		fmt.Println("Problem finding your history file.")
-		os.Exit(1)
+		logFatal("Problem finding your history file.")
+		// System exit!
 	}
 	for _, info := range infos {
 		if isHistoryFile(info.Name()) {

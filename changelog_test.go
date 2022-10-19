@@ -1,7 +1,6 @@
 package changelog
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -13,14 +12,41 @@ func assertSortOrder(t *testing.T, history *Changelog, header string, expected i
 	assert.Equal(t, expected, history.GetVersion(header).sortOrder, "Wrong sortOrder for header: %q", header)
 }
 
+func BenchmarkChangelogString_Simplest(b *testing.B) {
+	history := NewChangelog()
+	history.AddLineToVersion("", &ChangeLine{
+		Summary:   "summary 1",
+		Reference: "reference 1",
+	})
+	for n := 0; n < b.N; n++ {
+		_ = history.String()
+	}
+}
+
+func BenchmarkChangelogString_Complex(b *testing.B) {
+	history := NewChangelog()
+	history.GetVersionOrCreate("1.2.3").Date = "2022-10-10"
+	history.AddLineToVersion("", &ChangeLine{
+		Summary:   "summary 1",
+		Reference: "#1",
+	})
+	history.AddLineToVersion("1.2.3", &ChangeLine{Summary: "summary 2", Reference: "https://example.com/subpage/%282%29"})
+	history.AddLineToVersion("1.2.3", &ChangeLine{Summary: "summary 3", Reference: "#3"})
+	history.AddLineToVersion("3.2.1", &ChangeLine{Summary: "summary 4 - https://example.com/subpage/%284%29", Reference: "#4"})
+	history.AddLineToSubsection("3.2.1", "Subsection A", &ChangeLine{Summary: "summary 5", Reference: "#5"})
+	for n := 0; n < b.N; n++ {
+		_ = history.String()
+	}
+}
+
 func TestChangelogString_Simplest(t *testing.T) {
-	changelog := NewChangelog()
-	changelog.AddLineToVersion("", &ChangeLine{
+	history := NewChangelog()
+	history.AddLineToVersion("", &ChangeLine{
 		Summary:   "summary 1",
 		Reference: "reference 1",
 	})
 
-	actual := changelog.String()
+	actual := history.String()
 
 	expected := `  * summary 1 (reference 1)` + "\n"
 	assert.Equal(t, expected, actual)
@@ -33,9 +59,9 @@ func TestChangelogString_Complex(t *testing.T) {
 		Summary:   "summary 1",
 		Reference: "#1",
 	})
-	history.AddLineToVersion("1.2.3", &ChangeLine{Summary: "summary 2", Reference: "#2"})
+	history.AddLineToVersion("1.2.3", &ChangeLine{Summary: "summary 2", Reference: "https://example.com/subpage/%282%29"})
 	history.AddLineToVersion("1.2.3", &ChangeLine{Summary: "summary 3", Reference: "#3"})
-	history.AddLineToVersion("3.2.1", &ChangeLine{Summary: "summary 4", Reference: "#4"})
+	history.AddLineToVersion("3.2.1", &ChangeLine{Summary: "summary 4 - https://example.com/subpage/%284%29", Reference: "#4"})
 	history.AddLineToSubsection("3.2.1", "Subsection A", &ChangeLine{Summary: "summary 5", Reference: "#5"})
 
 	actual := history.String()
@@ -88,5 +114,5 @@ func TestChangelog_WritesWhatItParses(t *testing.T) {
 	assert.Equal(t, string(expected), actual)
 
 	wfd, _ := os.Create("testdata/History-rewritten.md")
-	fmt.Fprintf(wfd, actual)
+	wfd.WriteString(actual)
 }
