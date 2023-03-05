@@ -20,6 +20,10 @@ var (
 			matched: []string{"# HEAD", "HEAD", ""},
 		},
 		{
+			text:    "# [Unreleased]",
+			matched: []string{"# [Unreleased]", "[Unreleased]", ""},
+		},
+		{
 			text:    "# 1.0.0",
 			matched: []string{"# 1.0.0", "1.0.0", ""},
 		},
