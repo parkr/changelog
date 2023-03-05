@@ -9,10 +9,10 @@ import (
 // initialized except {{.Date}}.
 func NewVersion(versionNum string) *Version {
 	var sortOrder int
-	switch strings.TrimSpace(versionNum) {
+	switch strings.ToUpper(strings.TrimSpace(versionNum)) {
 	case "":
 		sortOrder = -1
-	case "HEAD":
+	case "HEAD", "[UNRELEASED]":
 		sortOrder = 0
 	default:
 		sortOrder = 1
