@@ -164,6 +164,7 @@ var (
 
 ## [*Previously:*](https://example.com/previously?baz=boing)
 
+- [ ] [The Mechanical Apple Watch | Watchfinder & Co. - YouTube](https://youtube.com/)
 - [ ] [The Internet’s Own Example](https://example.com)
 - [ ] [Little Shop of Horrors: Tiny Desk (Home) Concert - YouTube](https://m.youtube.com/watch?v=ymqKPz5kRXE)
 - [ ] [D) Sector 4 (AQA)](https://www.ign.com/wikis/metroid-fusion/D)_Sector_4_(AQA))
@@ -269,6 +270,7 @@ func TestParseChangelog_TrickyInput(t *testing.T) {
 	assert.Equal(t, previouslyVersion, &Version{
 		Version: "", // TODO: Think about whether I should try to take any h1/h2 as a header, or only specifically organized ones.
 		History: []*ChangeLine{
+			{Summary: "[ ] [The Mechanical Apple Watch | Watchfinder & Co. - YouTube](https://youtube.com/)", Reference: ""},
 			{Summary: "[ ] [The Internet’s Own Example](https://example.com)", Reference: ""},
 			{Summary: "[ ] [Little Shop of Horrors: Tiny Desk (Home) Concert - YouTube](https://m.youtube.com/watch?v=ymqKPz5kRXE)", Reference: ""},
 			{Summary: "[ ] [D) Sector 4 (AQA)](https://www.ign.com/wikis/metroid-fusion/D)_Sector_4_(AQA))", Reference: ""},
