@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	versionRegexp           = regexp.MustCompile(`##? (?i:(\[UNRELEASED\]|HEAD|v?\d+\.\d+(?:\.\d+)?))(?U:.*)(\d{4}-\d{2}-\d{2})?.?$`)
-	subheaderRegexp         = regexp.MustCompile(`### ([0-9A-Za-z_ ]+)`)
-	changeLineRegexp        = regexp.MustCompile(`[\*|\-] (.+)`)
-	changeLineRegexpWithRef = regexp.MustCompile(`[\*|\-] (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
+	versionRegexp           = regexp.MustCompile(`##? (?i:(\[UNRELEASED\]|HEAD|v?\d+\.\d+(?:\.\d+)?))(?U:.*)(\d{4}-\d{2}-\d{2})?.?$\z`)
+	subheaderRegexp         = regexp.MustCompile(`### ([0-9A-Za-z_ ]+)\z`)
+	changeLineRegexp        = regexp.MustCompile(`[\*|\-] (.+)\z`)
+	changeLineRegexpWithRef = regexp.MustCompile(`[\*|\-] (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))\z`)
 
 	verbose = false
 )

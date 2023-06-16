@@ -160,6 +160,17 @@ var (
 
 * Birthday!!!!!
 `
+	trickyChangelog = `Hello there!
+
+## [*Previously:*](https://example.com/previously?baz=boing)
+
+- [ ] [The Internet’s Own Example](https://example.com)
+- [ ] [Little Shop of Horrors: Tiny Desk (Home) Concert - YouTube](https://m.youtube.com/watch?v=ymqKPz5kRXE)
+- [ ] [D) Sector 4 (AQA)](https://www.ign.com/wikis/metroid-fusion/D)_Sector_4_(AQA))
+- [ ] [Issue #123](https://github.com/octocat/mona/issues/123) (#123)
+
+A link: https://example.com/2?foo=bar
+`
 )
 
 func TestVersionRegexp(t *testing.T) {
@@ -244,4 +255,26 @@ func TestParseChangelog_WithoutHeaders(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expected, changes)
+}
+
+func TestParseChangelog_TrickyInput(t *testing.T) {
+	changes := NewChangelog()
+	SetVerbose(true)
+
+	err := parseChangelog(strings.NewReader(trickyChangelog), changes)
+
+	assert.NoError(t, err)
+	assert.Len(t, changes.Versions, 1)
+	previouslyVersion := changes.Versions[0]
+	assert.Equal(t, previouslyVersion, &Version{
+		Version: "", // TODO: Think about whether I should try to take any h1/h2 as a header, or only specifically organized ones.
+		History: []*ChangeLine{
+			{Summary: "[ ] [The Internet’s Own Example](https://example.com)", Reference: ""},
+			{Summary: "[ ] [Little Shop of Horrors: Tiny Desk (Home) Concert - YouTube](https://m.youtube.com/watch?v=ymqKPz5kRXE)", Reference: ""},
+			{Summary: "[ ] [D) Sector 4 (AQA)](https://www.ign.com/wikis/metroid-fusion/D)_Sector_4_(AQA))", Reference: ""},
+			{Summary: "[ ] [Issue #123](https://github.com/octocat/mona/issues/123)\n\nA link: https://example.com/2?foo=bar", Reference: "#123"},
+		},
+		Subsections: []*Subsection{},
+		sortOrder:   -1,
+	})
 }
