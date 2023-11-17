@@ -1,11 +1,13 @@
 # changelog
 
-Parse markdown-esque changelogs (like our example), parse out versions, sections, changes & references.
+Parse markdown-esque changelogs (like our example in [History.markdown](History.markdown)), parse out versions, sections, changes & references.
 Motivation: automate update of changelogs
 
 Bundled with a command, `changelogger`.
 
-[![Build Status](https://travis-ci.org/parkr/changelog.svg?branch=master)](https://travis-ci.org/parkr/changelog)
+Supports several header formats such as SemVer and [KeepAChangelog](https://keepachangelog.com).
+
+[![Build & test](https://github.com/parkr/changelog/actions/workflows/push-build-test-on-push.yml/badge.svg)](https://github.com/parkr/changelog/actions/workflows/push-build-test-on-push.yml)
 
 ## `changelogger` command
 
