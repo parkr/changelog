@@ -87,6 +87,22 @@ var (
 			text:    " ## v0.6 (2015-02-30)",
 			matched: []string{"## v0.6 (2015-02-30)", "v0.6", "2015-02-30"},
 		},
+		{
+			text:    "## v0.6.0-beta",
+			matched: []string{"## v0.6.0-beta", "v0.6.0-beta", ""},
+		},
+		{
+			text:    "## v0.6.0-beta - 2015-02-30",
+			matched: []string{"## v0.6.0-beta - 2015-02-30", "v0.6.0-beta", "2015-02-30"},
+		},
+		{
+			text:    "## [v0.6.0-beta] - 2015-02-30",
+			matched: []string{"## [v0.6.0-beta] - 2015-02-30", "v0.6.0-beta", "2015-02-30"},
+		},
+		{
+			text:    "## [1.0.0-rc.1+build.1] - 2015-02-30",
+			matched: []string{"## [1.0.0-rc.1+build.1]", "1.0.0-rc.1+build.1", "2015-02-30"},
+		},
 	}
 	subheaders = []testRegexpOutput{
 		{
