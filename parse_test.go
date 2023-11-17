@@ -101,7 +101,7 @@ var (
 		},
 		{
 			text:    "## [1.0.0-rc.1+build.1] - 2015-02-30",
-			matched: []string{"## [1.0.0-rc.1+build.1]", "1.0.0-rc.1+build.1", "2015-02-30"},
+			matched: []string{"## [1.0.0-rc.1+build.1] - 2015-02-30", "1.0.0-rc.1+build.1", "2015-02-30"},
 		},
 	}
 	subheaders = []testRegexpOutput{
@@ -194,8 +194,8 @@ func TestVersionRegexp(t *testing.T) {
 	for _, version := range versions {
 		assert.Regexp(t, versionRegexp, version.text)
 		matches, ok := matchLine(versionRegexp, version.text)
-		assert.True(t, ok)
-		assert.Equal(t, matches, version.matched)
+		assert.True(t, ok, "regexp should match %q", version.text)
+		assert.Equal(t, version.matched, matches)
 	}
 }
 
